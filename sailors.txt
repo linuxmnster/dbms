@@ -1,0 +1,79 @@
+Fine the names of sailors who have reserved boat no 103    
+SELECT s.sname
+FROM Sailors s
+JOIN Reserves r ON s.sid = r.sid
+WHERE r.bid = 103;
+
+Find the names of sailors who have reserved a red boat
+SELECT DISTINCT s.sname
+FROM Sailors s
+JOIN Reserves r ON s.sid = r.sid
+JOIN Boats b ON r.bid = b.bid
+WHERE b.color = 'red';
+
+Find the color of boats reserved by lubber
+SELECT b.color FROM boats b
+JOIN reserves r ON b.bid = r.bid
+JOIN sailors s ON r.sid = s.sid
+WHERE s.sname = 'Lubber';
+
+Find the names of the sailors who have reserves atleast one boat
+SELECT DISTINCT s.sname
+FROM sailors s
+JOIN reserves r ON r.sid = s.sid;
+
+Find the names of the sailors who have reserved a red or green boat
+SELECT s.sname FROM sailors s
+JOIN reservers r ON r.sid = s.sid
+JOIN boats b ON b.bid = r.bid
+WHERE b.color = 'red' OR b.color = 'green';
+
+Find all sids who have a rating of 10 or reserved boat 104
+SELECT DISTINCT s.sname FROM sailors s
+JOIN reserves r on r.sid = s.sid
+WHERE s.rating = 10 OR r.bid = 104;
+
+Find the sailor whose rating is better than some sailor called Horatio
+SELECT sname FROM sailors
+WHERE rating > ANY(
+	SELECT rating
+	FROM sailors
+	WHERE sname = 'Horatio');
+
+Find the names of sailors who have reserved a red boat, and list in the order of age.
+SELECT s.sname FROM sailors s
+JOIN reserves r ON s.sid = r.sid
+JOIN boats b ON r.bid = b.bid
+WHERE b.color  = 'red'
+ORDER BY s.age;
+
+Find the name and the age of the youngest sailor.  
+SELECT sname, age FROM sailors
+ORDER BY age
+LIMIT 1;
+
+Count the different no of sailors names
+SELECT COUNT(DISTINCT sname) FROM sailors;
+
+Calculate the average age of sailors
+SELECT AVG(age) FROM sailors;
+
+Find all information of sailors who have reserved boat number 101.
+ SELECT s.sname, s.rating, s.age, s.sid FROM sailors s
+ JOIN reserves r ON r.sid = s.sid
+ JOIN boats b ON r.bid = b.bid
+ WHERE b.bid = 101;
+
+Find the names of sailors who have reserved all boats.  
+SELECT s.sname
+FROM Sailors s
+JOIN Reserves r ON s.sid = r.sid
+GROUP BY s.sid, s.sname
+HAVING COUNT(DISTINCT r.bid) = (SELECT COUNT(*) FROM Boats);
+
+Find the average age of sailors for each rating level that has at least two sailors.
+SELECT rating, AVG(age) AS avg_age
+FROM Sailors
+GROUP BY rating
+HAVING COUNT(*) >= 2;
+
